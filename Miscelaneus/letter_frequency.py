@@ -1,31 +1,39 @@
 import matplotlib.pyplot as plt
 import string
 
-ascii = string.ascii_lowercase
-a = input()
-a = str.lower(a)
-a = sorted(a)#[a,a,b,c,c,...,z,z]
+### takes an text input and displays it's letter frequency in percentage ###
 
-b = [0]*len(list(ascii))#[0,0,...,0] used for keeping count of how many letters are found
+input = input()# get string
+input = str.lower(input)# set all to lowercase 
+input = sorted(input)#[a,a,b,c,c,...,z,z]
 
-# go trough every index of the input array a and compare it with the ascii list, if a match increment that letter in b 
-for element in range(len(a)):
-	for compare in range(len(b)):
-		if(a[element]==list(ascii)[compare]):
-			b[compare]+=1
+ascii = string.ascii_lowercase # list of all ascii caracteres
+count = [0]*len(list(ascii))#[0,0,...,0] used for keeping count of how many letters are found
 
-c = [0]*len(b) 
-for i in range(len(b)):
-	c[i] = [b[i],ord(list(ascii)[i])] #[[a,b],[a,b]...] a = amount(int),b = ascii number(int)
-x = sorted(c, key=lambda x:x[0],reverse=True) # c sorted by amount (reversed, biggest at beginning)
-ascii_list = [""]*len(b)
-for i in range(len(b)):
-	ascii_list[i] = chr(x[i][1]) #letters sorted by extracting from x
-b = sorted(b,reverse=True) #sort b (reversed, biggest at beginning)
-percent = [0]*len(b) 
-for i in range(len(b)):
-	percent[i] = b[i]/len(a)#calcuate percentage
-print(percent,ascii_list)
-plt.bar(range(len(b)),percent,tick_label=ascii_list)
+# go trough every index of the input array input and compare it with the ascii list, if input match increment that letter in count:
+for element in range(len(input)):
+	for compare in range(len(count)):
+		if(input[element]==list(ascii)[compare]):
+			count[compare]+=1
+
+# put caracters and their counts in one data structure to make handeling them easier, as it will keep caracters and counts together:
+data = [0]*len(count) 
+for i in range(len(count)):
+	data[i] = [count[i],ord(list(ascii)[i])] #[[caracter,count],[caracter,count]...] input = amount(is a int),count = ascii number(is a int)
+# sort data by count: 
+data = sorted(data, key=lambda x:x[0],reverse=True) # data sorted by count (reversed thus biggest at beginning)
+
+# create the label list:
+ascii_list = [""]*len(count)# empty string list to populate
+for i in range(len(count)):
+	ascii_list[i] = chr(data[i][1]) #letters sorted by extracting them from data
+
+# create the percentage list:
+percent = [0]*len(data) 
+for i in range(len(count)):
+	percent[i] = data[i][0]/len(input)#calcuate percentage percentage = #of that caracter / total text lenght 
+
+#display bar graph:
+plt.bar(range(len(count)),percent,tick_label=ascii_list)
 plt.ylabel('amount')
 plt.show()
